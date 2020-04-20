@@ -1,3 +1,5 @@
 __pycache__
 /.vscode/
 /venv/
+.ipynb_checkpoints/
+SCUT-FBP5500_v2/
