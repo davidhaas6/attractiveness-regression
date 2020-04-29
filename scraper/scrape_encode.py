@@ -24,7 +24,7 @@ reddit_client = praw.Reddit(client_id='6ZOjAwnqUehb5Q',
                             client_secret='gc4rkA50yNq9pBn1diU11Xj1nKY', 
                             user_agent='ffinder_test')
 api = psaw.PushshiftAPI(reddit_client)
-deleted_reddit, deleted_imgur = pickle.load(open("deleted_binaries.pkl",'rb'))
+deleted_reddit, deleted_imgur = pickle.load(open("scraper/deleted_binaries.pkl",'rb'))
 verbose = False
 
 # Fix dlib multiprocessing issues with MacOS https://github.com/davisking/dlib/issues/1555
@@ -65,7 +65,6 @@ def process_image(api_result):
             tuple of encoding and metadata if successfull
     """
     if not is_img(api_result.url):  return False
-
     # Fetch and load image
     try:
         img_bytes = requests.get(api_result.url).content
@@ -78,7 +77,7 @@ def process_image(api_result):
     face_locs = face_recognition.face_locations(img)
     if len(face_locs) > 0:
         encodings = face_recognition.face_encodings(img, known_face_locations=face_locs)
-        return encodings, (api_result.shortlink, api_result.url)
+        return encodings, (api_result.shortlink, api_result.url, api_result.score)
     else:
         return False
 
@@ -101,7 +100,7 @@ def generate_encodings(subreddit, face_limit=10e7):
     encodings = np.zeros((0,128))
     metadata = []
     
-    CHUNK_SIZE = .1 * 86400  # 7 day chunks
+    CHUNK_SIZE = 1 * 86400  # 7 day chunks
     chunk_end = datetime.now().timestamp()
     chunk_start = chunk_end - CHUNK_SIZE
     stop = False
@@ -148,7 +147,7 @@ def main(subreddits, out_dir='./encodings/'):
     if not os.path.exists(out_dir): os.mkdir(out_dir)
 
     for subreddit in subreddits:
-        encodings, metadata = generate_encodings(subreddit)
+        encodings, metadata = generate_encodings(subreddit, 300)
 
         # Save encodings
         name = out_dir + subreddit + "_" + datetime.now().strftime('%H%M-%m%d%y') + ".pkl"
