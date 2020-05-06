@@ -114,7 +114,11 @@ def generate_encodings(subreddit, face_limit=5e5):
 
             log("\nProcessing images...")
             with ctx.Pool() as pool:
-                face_data = list(tqdm(pool.imap_unordered(process_image, chunk_data), unit=" Images"))
+                try:
+                    face_data = list(tqdm(pool.imap_unordered(process_image, chunk_data), unit=" Images"))
+                except KeyboardInterrupt:
+                    print("Ending...")
+                    stop = True
 
             # Separate and store face_data into encodings and metadata
             for entry in face_data:
@@ -135,9 +139,6 @@ def generate_encodings(subreddit, face_limit=5e5):
             log("%i new faces encoded (avg %.2f faces per image)! Total = %i" % (num_added, face_per_img, length))
         
         except Exception as e:
-            if e is KeyboardInterrupt:
-                print("****************************************"*2)
-                break
             print("ERROR: ")
             traceback.print_exc()
 
