@@ -82,7 +82,7 @@ def process_image(api_result):
         return False
 
 
-def generate_encodings(subreddit, face_limit=500_000):
+def generate_encodings(subreddit, face_limit=5e5):
     """ Generates a set of facial encodings from each valid image on a subreddit
 
         Given a subreddit, this function collects its images, starting with the most recent in multi-day chunks.
