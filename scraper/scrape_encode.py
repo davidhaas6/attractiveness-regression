@@ -147,7 +147,7 @@ def main(subreddits, out_dir='./encodings/'):
     if not os.path.exists(out_dir): os.mkdir(out_dir)
 
     for subreddit in subreddits:
-        encodings, metadata = generate_encodings(subreddit, 300)
+        encodings, metadata = generate_encodings(subreddit)
 
         # Save encodings
         name = out_dir + subreddit + "_" + datetime.now().strftime('%H%M-%m%d%y') + ".pkl"
