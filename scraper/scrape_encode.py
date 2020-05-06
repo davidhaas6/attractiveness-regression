@@ -118,7 +118,7 @@ def generate_encodings(subreddit, face_limit=5e5):
                     face_data = list(tqdm(pool.imap_unordered(process_image, chunk_data), unit=" Images"))
                 except KeyboardInterrupt:
                     print("Ending...")
-                    stop = True
+                    break
 
             # Separate and store face_data into encodings and metadata
             for entry in face_data:
