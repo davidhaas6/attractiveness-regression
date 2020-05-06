@@ -135,6 +135,8 @@ def generate_encodings(subreddit, face_limit=5e5):
             log("%i new faces encoded (avg %.2f faces per image)! Total = %i" % (num_added, face_per_img, length))
         
         except Exception as e:
+            if e is KeyboardInterrupt:
+                break
             print("ERROR: ")
             traceback.print_exc()
 
