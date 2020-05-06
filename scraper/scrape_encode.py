@@ -136,6 +136,7 @@ def generate_encodings(subreddit, face_limit=5e5):
         
         except Exception as e:
             if e is KeyboardInterrupt:
+                print("****************************************"*2)
                 break
             print("ERROR: ")
             traceback.print_exc()
