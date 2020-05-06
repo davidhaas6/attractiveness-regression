@@ -82,7 +82,7 @@ def process_image(api_result):
         return False
 
 
-def generate_encodings(subreddit, face_limit=10e7):
+def generate_encodings(subreddit, face_limit=500_000):
     """ Generates a set of facial encodings from each valid image on a subreddit
 
         Given a subreddit, this function collects its images, starting with the most recent in multi-day chunks.
@@ -100,7 +100,7 @@ def generate_encodings(subreddit, face_limit=10e7):
     encodings = np.zeros((0,128))
     metadata = []
     
-    CHUNK_SIZE = 1 * 86400  # 7 day chunks
+    CHUNK_SIZE = 1 * 86400  # 1 day chunks
     chunk_end = datetime.now().timestamp()
     chunk_start = chunk_end - CHUNK_SIZE
     stop = False
